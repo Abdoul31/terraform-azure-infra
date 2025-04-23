@@ -4,7 +4,7 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.20.2  # Docker avec Node.js + npm
-    working_directory: ~/hello-world
+    working_directory: ~/project/hello-world
 
 jobs:
   build:
