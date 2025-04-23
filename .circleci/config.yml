@@ -3,36 +3,35 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:18.20.2  # Docker avec Node.js + npm
-    working_directory: ~/project/hello-world
+      - image: cimg/node:18.17
+    working_directory: ~/repo/hello-world
 
 jobs:
   build:
     executor: node-executor
     steps:
-      - checkout  # clone le repo
+      - checkout:
           path: ~/repo
+
       - run:
-          name: Install dependencies
+          name: Installer les dépendances npm
           command: npm install
 
       - run:
-          name: Run tests
-          command: npm test || echo "No tests yet"
+          name: Vérifier la version d'expo
+          command: npx expo --version
 
       - run:
-          name: Install Expo CLI
-          command: npm install -g expo-cli
+          name: Lancer les tests
+          command: npm run test || echo "Pas de test configuré"
 
       - run:
-          name: Check Expo version
-          command: expo --version
-
-      - run:
-          name: Simulate build
-          command: echo "Expo app ready to build/deploy"
+          name: Générer le build Expo Web
+          command: npx expo export --output-dir dist
 
 workflows:
-  build_and_test:
+  version: 2
+  build-deploy:
     jobs:
       - build
+
